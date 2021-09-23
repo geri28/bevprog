@@ -26,12 +26,12 @@ int main(){
 	cout << "\n Have you seen " << baratnev << " lately? \n";
 	if(neme == 'f'){
 		cout << "If you see " << baratnev << " please ask her to call me. \n";
-	}if(neme == 'm'){
+	}else if(neme == 'm'){
 		cout << "If you see " << baratnev << " please ask him to call me. \n";
 	}else{
 		cout << "If you see " << baratnev << " please ask them to call me. \n";
 		}
-	cout << "I hear you just had a birthday and you are " << age << " years old.";
+	cout << "I hear you just had a birthday and you are " << age << " years old. ";
 	if(age == 12){
 	cout << "Next year you will be \n" << age+1.;
 	}if(age == 17){
@@ -40,6 +40,6 @@ int main(){
 	cout << "I hope you are enjoying retirement. \n";
 	}
 	
-	cout << "Your sincerely \n \n" << elsonev << "\n";
+	cout << "\n Your sincerely \n" << elsonev << "\n";
 	return 0;
 }
