@@ -7,7 +7,12 @@ constexpr char print = ';';
 constexpr char name = 'a';
 constexpr char let = 'L';
 constexpr char result = '=';
-constexpr string sqrt= "sqrt";
+constexpr char sroot = 's';
+constexpr char ppow = 'p';
+const string sqrtW = "sqrt";
+const string powW = "pow";
+constexpr char hashDeclar = '#';
+const string quitWord =  "exit";
 const string declkey = "let"; //constexpr string since C++20 only
 
 //function declarations
@@ -16,6 +21,9 @@ double primary();
 double term();
 double declaration();
 double statement();
+double square_root();
+double math_pow();
+double personal_pow(double power_base, int exponent);
 
 // Variable ///////////////////////
 class Variable {
@@ -137,6 +145,9 @@ Token Token_stream::get()
     			if (s == declkey) return Token{let};
     			else if (is_declared(s))
     				return Token(number, get_value(s));
+    			if(s == sqrtW) return Token(sroot);
+    			if(s == powW) return Token(ppow);
+    			if(s == quitWord) return Token(quit);
     			return Token{name,s};
     		}
     		error("Bad token");
@@ -222,6 +233,12 @@ double primary()
 			return - primary();
 		case '+':
 			return primary();
+		case hashDeclar:
+			return declaration();
+		case sroot:
+			return square_root();
+		case ppow:
+			return math_pow();
 		default:
 			error("primary expected");
 	}
@@ -234,7 +251,7 @@ double term()
 	Token t = ts.get();
 	while(true)
 	{
-		if()		//itt gondolkozz sztem
+
 		switch (t.kind)
 		{
 			case '*':
@@ -294,7 +311,43 @@ double expression()
 		}
 	}
 }
+double square_root(){
+	Token t = ts.get();
+	if(t.kind != '(') error("'(' expected in sqrt");
+	double x = expression();
+	if(x < 0) error("the expression can not be negative in sqrt");
+	t = ts.get();
+	if(t.kind != ')') error("')' expected in sqrt");
+	return sqrt(x);
+}
+double math_pow(){
+	Token t = ts.get();
+	if(t.kind != '(') error("'(' expected in pow");
+	double x = expression();
+	t=ts.get();
+	if(t.kind != ',') error("miss the ,");
+	t=ts.get();
+	if(t.kind != number) error("miss the exponent or not a number");
+	int i = narrow_cast<int>(t.value);
+	if (i != t.value) error("power is not an integer");
+	t = ts.get();
+	if (t.kind != ')') error("')' expected in pow");
+	return personal_pow(x,i);
+}
 
+double personal_pow(double power_base, int exponent){
+	if(exponent==0)
+	{
+		if(power_base==0) error("Indeterminate form pow(0,0)");
+		return 1;
+	}
+	double resPow = power_base; 
+	for (int i = 2; i <= exponent; ++i)
+	{
+		resPow *= power_base;
+	}
+	return resPow;
+}
 double declaration()
 {
 	Token t = ts.get();
